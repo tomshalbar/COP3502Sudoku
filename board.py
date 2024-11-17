@@ -1,3 +1,15 @@
+import pygame
+from constants import *
+import sys
+
+
+#variables
+WIDTH = SQUARE_SIZE*BOARD_COLS
+HEIGHT = SQUARE_SIZE*BOARD_ROWS
+LINE_WIDTH = 3
+BOARD_ROWS = 9
+BOARD_COLS = 9
+SQUARE_SIZE = 30
 
 class Board:
 
@@ -5,12 +17,39 @@ class Board:
         """Constructor for the Board class.
         screen is a window from PyGame.
         difficulty is a variable to indicate if the user chose easy medium, or hard."""
-        pass
+
+        self.width = width
+        self.height = height
+        self.screen = screen
+        self.difficulty = difficulty
+
 
     def draw(self):
         """Draws an outline of the Sudoku grid, with bold lines to delineate the 3x3 boxes.
         Draws every cell on this board."""
-        pass
+        # pass
+        for i in range (1,BOARD_ROWS):
+            pygame.draw.line(
+                screen,
+                LINE_COLOR,
+                (0, i*SQUARE_SIZE),
+                (WIDTH, i * SQUARE_SIZE),
+                LINE_WIDTH
+            )
+
+
+        #draw vertical grids
+        for i in range(1, BOARD_COLS):
+            pygame.draw.line(
+                screen,
+                LINE_COLOR,
+                (i * SQUARE_SIZE, 0),
+                (i * SQUARE_SIZE, HEIGHT),
+                LINE_WIDTH
+
+            )
+
+
 
     def select(self, row, col):
         """Marks the cell at (row, col) in the board as the current selected cell.
@@ -62,4 +101,26 @@ class Board:
     def check_board(self):
         """Check whether the Sudoku board is solved correctly."""
         pass
+
+
+
+#testing
+if __name__ == '__main__':
+
+    pygame.init()
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Sudoku")
+    screen.fill(BG_COLOR)
+    board = Board(10, 10, screen, difficulty='medium')
+
+    while True:
+        # event loop
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+        board.draw()
+        pygame.display.update()
+        pygame.time.Clock().tick(60)
 
