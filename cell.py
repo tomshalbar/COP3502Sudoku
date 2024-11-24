@@ -22,7 +22,7 @@ class Cell:
 
         if self.selected:
             #sets to red
-            color = (255, 0, 0)
+            color = constants.RED
         else:
             #sets to black
             color = (0, 0, 0)
@@ -35,7 +35,7 @@ class Cell:
             text = font_size.render(str(self.value), True, (0, 0, 0))
             text_rectangle = text.get_rect(center=(x + constants.SQUARE_SIZE // 2, y + constants.SQUARE_SIZE // 2))
             self.screen.blit(text, text_rectangle)
-            
+
         elif self.sketched_value != 0:
             text = font_size.render(str(self.sketched_value), True, (128, 128, 128))
             text_rectangle = text.get_rect(center=(x + constants.SQUARE_SIZE // 2, y + constants.SQUARE_SIZE // 2))
