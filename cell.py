@@ -2,16 +2,18 @@ import pygame
 import constants
 
 class Cell:
-    def __init__(self, value, row, col, screen):
+    def __init__(self, value, row, col, screen, pre_filled=False):
         self.value = value
         self.row = row
         self.col = col
         self.screen = screen
         self.sketched_value = 0
         self.selected = False
+        self.pre_filled = pre_filled
 
     def set_cell_value(self, value):
-        self.value = value
+        if not self.pre_filled:
+            self.value = value
 
     def set_sketched_value(self, value):
         self.sketched_value = value
