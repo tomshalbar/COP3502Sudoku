@@ -5,13 +5,7 @@ from cell import *
 
 
 #variables
-WIDTH = SQUARE_SIZE*BOARD_COLS
-HEIGHT = SQUARE_SIZE*BOARD_ROWS
-LINE_WIDTH = LINE_WIDTH
-BOARD_ROWS = BOARD_ROWS
-BOARD_COLS = BOARD_COLS
-SQUARE_SIZE = SQUARE_SIZE
-LINE_COLOR = LINE_COLOR
+
 
 class Board:
 
@@ -72,17 +66,16 @@ class Board:
         self.selected_cell = self.cells[row][col]
         self.selected_cell.selected = True
 
-    def click(self, row, col):
+    def click(self, x_cord, y_cord):
         """If a tuple of (x,y) coordinates is within the displayed board,
         this function returns a tuple of the (row, col) of the cell which was clicked.
         Otherwise, this function returns None."""
         # re-maps the raw coordinates to the grid created if raw coordinates are in the board
-        if 0 <= coord_row < HEIGHT and 0 <= coord_col < WIDTH:
-            row = coord_row // SQUARE_SIZE
-            col = coord_col // SQUARE_SIZE
+        if 0 <= x_cord < HEIGHT and 0 <= y_cord < WIDTH:
+            row = x_cord // SQUARE_SIZE
+            col = y_cord // SQUARE_SIZE
 
-            return (row, col)
-
+            return row, col
         return None
 
     def clear(self):
@@ -195,23 +188,4 @@ class Board:
 
 
 
-#testing
-if __name__ == '__main__':
-
-    pygame.init()
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("Sudoku")
-    screen.fill(BG_COLOR)
-    board = Board(10, 10, screen, difficulty='medium')
-
-    while True:
-        # event loop
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
-        board.draw()
-        pygame.display.update()
-        pygame.time.Clock().tick(60)
 

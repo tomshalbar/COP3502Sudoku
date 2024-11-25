@@ -1,3 +1,5 @@
+import constants
+import pygame
 
 class Cell:
     def __init__(self, value, row, col, screen, pre_filled=False):
