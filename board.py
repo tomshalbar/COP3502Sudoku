@@ -56,6 +56,7 @@ class Board:
         Once a cell has been selected, the user can edit its value or sketched value."""
         pass
 
+
     def click(self, row, col):
         """If a tuple of (x,y) coordinates is within the displayed board,
         this function returns a tuple of the (row, col) of the cell which was clicked.
@@ -87,12 +88,19 @@ class Board:
 
 
     def is_full(self):
-        """Returns a Boolean value indicating whether the board is full or not."""
-        pass
+        """Returns a Boolean value indicating fwhether the board is full or not."""
+        for row in self.board:
+            for cell in row:
+                if cell == "-":
+                    return False
+        return True
 
     def update_board(self):
         """Updates the underlying 2D board with the values in all cells."""
-        pass
+        self.cells = [
+            [Cell(self.board[i][j], i, j) for j in range(self.cols)]
+            for i in range(self.rows)
+        ]
 
     def find_empty(self):
         """Finds an empty cell and returns its row and col as a tuple (x,y)."""
@@ -123,4 +131,13 @@ if __name__ == '__main__':
         board.draw()
         pygame.display.update()
         pygame.time.Clock().tick(60)
+
+
+            if event.type == pygame.MOUSEBUTTONDOWN and not board.is_full:
+                x, y = event.pos
+                row = y // 200
+                col = x // 200
+
+
+        pygame.display.update()
 
