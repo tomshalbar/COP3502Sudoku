@@ -48,7 +48,11 @@ class Board:
 
         for row in range(self.width):
             for col in range(self.width):
-                self.cells[row][col] = Cell(board[row][col], row, col, screen, pre_filled=True)
+                if board[row][col] != 0:
+                    self.cells[row][col] = Cell(board[row][col], row, col, screen, pre_filled=True)
+                else:
+                    self.cells[row][col] = Cell(board[row][col], row, col, screen, pre_filled=False)
+
 
 
     def draw(self):

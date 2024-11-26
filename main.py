@@ -108,51 +108,56 @@ def game_in_progress_screen(screen):
 
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    screen = pygame.display.set_mode((WIDTH, HEIGHT + SQUARE_SIZE))
     pygame.display.set_caption("Sudoku")
     screen.fill(BG_COLOR)
-    # board = Board(10, 10, screen, difficulty='medium')
     mode = MODE_START
-
-    while True:
+    run = True
+    square_col, square_row = 0, 0
+    while run:
         if mode == MODE_START:
             easy, medium, hard = start_game_screen(screen)
             # event loop
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
+                    run = False
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if easy.collidepoint(event.pos):
-                    board = Board(9, 9, screen, difficulty='easy')
-                    board.draw()
+                    game_board = Board(9, 9, screen, difficulty='easy')
                     mode = MODE_PROGRESS
                 elif medium.collidepoint(event.pos):
-                    board = Board(9, 9, screen, difficulty='medium')
-                    board.draw()
+                    game_board = Board(9, 9, screen, difficulty='medium')
                     mode = MODE_PROGRESS
                 elif hard.collidepoint(event.pos):
-                    board = Board(9, 9, screen, difficulty='hard')
-                    board.draw()
+                    game_board = Board(9, 9, screen, difficulty='hard')
                     mode = MODE_PROGRESS
 
 
         if mode == MODE_PROGRESS:
-            # event loop
+            game_board.draw()
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-            # if event.type == pygame.MOUSEBUTTONDOWN:
+                    run = False
 
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                game_board.cells[square_row][square_col].selected = False
+                clicked_x, clicked_y = event.pos
+                if clicked_y < HEIGHT:
+                    square_col, square_row = clicked_x // SQUARE_SIZE, clicked_y // SQUARE_SIZE
+                    if not game_board.cells[square_row][square_col].pre_filled: #Won't let user click pre filled square
+                        game_board.cells[square_row][square_col].selected = True
 
+            if event.type == pygame.KEYUP   :
+                if 48 < event.key < 58:
+                    game_board.cells[square_row][square_col].value = event.key - 48
         if mode == MODE_WON:
             won = game_won(screen)
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                    if easy.collidepoint(event.pos):
-                       pygame.quit()
-                       sys.exit()
+                       run = False
 
 
 
