@@ -13,6 +13,8 @@ def generate_sudoku(size, removed) -> list[list]:
     board = sudoku.get_board()
     sudoku.print_board()
     return board
+
+
 def create_welcome_buttons(text, width):
     button_font = pygame.font.Font(None, BUTTON_FONT)
     button_surf = button_font.render(text, 0, BUTTON_FONT_COLOR)
@@ -39,30 +41,68 @@ def start_game_screen(screen):
     screen.blit(welcome_picture, (0, 0))
     screen.blit(welcome_surf, welcome_rect)
     screen.blit(mode_surf, mode_rect)
-    x, y = create_welcome_buttons("Easy", WIDTH//3- 50)
-    a, b = create_welcome_buttons("Medium", WIDTH//1.5- 50)
-    c, d = create_welcome_buttons("Hard", WIDTH//1- 50)
-    screen.fill(BUTTON_FILL_COLOR, y, special_flags=0)
-    screen.fill(BUTTON_FILL_COLOR, b, special_flags=0)
-    screen.fill(BUTTON_FILL_COLOR, d, special_flags=0)
-    screen.blit(x,y)
-    screen.blit(a, b)
-    screen.blit(c, d)
+    easy_surf, easy_rect = create_welcome_buttons("Easy", WIDTH//3- 50)
+    medium_surf, medium_rect = create_welcome_buttons("Medium", WIDTH//1.5- 50)
+    hard_surf, hard_rect = create_welcome_buttons("Hard", WIDTH//1- 50)
+    screen.fill(BUTTON_FILL_COLOR, easy_rect, special_flags=0)
+    screen.fill(BUTTON_FILL_COLOR, medium_rect, special_flags=0)
+    screen.fill(BUTTON_FILL_COLOR, hard_rect, special_flags=0)
+    screen.blit(easy_surf, easy_rect)
+    screen.blit(medium_surf, medium_rect)
+    screen.blit(hard_surf, hard_rect)
+
+    return easy_rect, medium_rect, hard_rect
 
 
 
 
+def game_over(screen):
+    welcome_picture = pygame.image.load(WELCOME_BG_IMAGE).convert()
+    welcome_picture = pygame.transform.scale(welcome_picture, (WIDTH, HEIGHT))
+    game_over_font = pygame.font.Font(None, GAME_OVER_FONT)
+
+
+    pygame.display.flip()
+
+    game_over_surf = game_over_font.render("Game Over :(", 0, LINE_COLOR)
+    game_over_rect = game_over_surf.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 50))
+
+
+    screen.blit(welcome_picture, (0, 0))
+    screen.blit(game_over_surf, game_over_rect)
+
+
+    restart_surf, restart_rect = create_welcome_buttons("Restart", WIDTH // 1.5 - 50)
+
+
+    screen.fill(BUTTON_FILL_COLOR, restart_rect, special_flags=0)
+
+    screen.blit(restart_surf, restart_rect)
 
 
 
+def game_won(screen):
+    welcome_picture = pygame.image.load(WELCOME_BG_IMAGE).convert()
+    welcome_picture = pygame.transform.scale(welcome_picture, (WIDTH, HEIGHT))
+    game_over_font = pygame.font.Font(None, GAME_OVER_FONT)
 
+    pygame.display.flip()
 
-def game_over():
-    pass
+    game_over_surf = game_over_font.render("Game Won! :(", 0, LINE_COLOR)
+    game_over_rect = game_over_surf.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 50))
 
-def game_won():
-    pass
-def game_screen():
+    screen.blit(welcome_picture, (0, 0))
+    screen.blit(game_over_surf, game_over_rect)
+
+    game_won_surf, game_won_rect = create_welcome_buttons("Exit", WIDTH // 1.5 - 50)
+
+    screen.fill(BUTTON_FILL_COLOR, game_won_rect, special_flags=0)
+
+    screen.blit(game_won_surf, game_won_rect)
+
+    return game_won_rect
+
+def game_in_progress_screen(screen):
     pass
 
 
@@ -71,17 +111,56 @@ def main():
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Sudoku")
     screen.fill(BG_COLOR)
-    board = Board(10, 10, screen, difficulty='medium')
+    # board = Board(10, 10, screen, difficulty='medium')
+    mode = MODE_START
 
     while True:
-        # event loop
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+        if mode == MODE_START:
+            easy, medium, hard = start_game_screen(screen)
+            # event loop
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if easy.collidepoint(event.pos):
+                    board = Board(9, 9, screen, difficulty='easy')
+                    board.draw()
+                    mode = MODE_PROGRESS
+                elif medium.collidepoint(event.pos):
+                    board = Board(9, 9, screen, difficulty='medium')
+                    board.draw()
+                    mode = MODE_PROGRESS
+                elif hard.collidepoint(event.pos):
+                    board = Board(9, 9, screen, difficulty='hard')
+                    board.draw()
+                    mode = MODE_PROGRESS
 
-        start_game_screen(screen)
-        # board.draw()
+
+        if mode == MODE_PROGRESS:
+            # event loop
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+            # if event.type == pygame.MOUSEBUTTONDOWN:
+
+
+        if mode == MODE_WON:
+            won = game_won(screen)
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                   if easy.collidepoint(event.pos):
+                       pygame.quit()
+                       sys.exit()
+
+
+
+
+
+
+
+
         pygame.display.update()
 
         pygame.time.Clock().tick(60)

@@ -2,9 +2,9 @@ import pygame
 from constants import *
 import sys
 from cell import *
+from sudoku_generator import *
 
 
-#variables
 
 
 class Board:
@@ -20,7 +20,7 @@ class Board:
         self.difficulty = difficulty
         self.selected_cell = None
 
-        #creates 81 cell classes for each cell in the board
+
         self.cells = [
             [
                 Cell(0, row, col, screen)
@@ -29,10 +29,32 @@ class Board:
             for row in range(9)
         ]
 
+        if difficulty == "easy":
+            removed_cells = 30
+        elif difficulty == "medium":
+            removed_cells = 40
+        elif difficulty == "hard":
+            removed_cells = 50
+        else:
+            raise Exception("Difficulty must be either easy or medium. or hard")
+
+
+
+        self.sudoku_board = SudokuGenerator(self.width, removed_cells)
+        self.sudoku_board.fill_values()
+        self.sudoku_board.remove_cells()
+        board = self.sudoku_board.get_board()
+        self.sudoku_board.print_board()
+
+        for row in range(self.width):
+            for col in range(self.width):
+                self.cells[row][col] = Cell(board[row][col], row, col, screen, pre_filled=True)
+
+
     def draw(self):
         """Draws an outline of the Sudoku grid, with bold lines to delineate the 3x3 boxes.
         Draws every cell on this board."""
-        # pass
+        self.screen.fill(BG_COLOR)
         for i in range (1,BOARD_ROWS):
             pygame.draw.line(
                 self.screen,
@@ -53,6 +75,11 @@ class Board:
                 LINE_WIDTH
 
             )
+
+        for row in range(self.width):
+            for col in range(self.width):
+                self.cells[row][col].draw()
+
 
 
 
