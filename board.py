@@ -40,12 +40,23 @@ class Board:
 
 
 
-        self.sudoku_board = SudokuGenerator(self.width, removed_cells)
-        self.sudoku_board.fill_values()
+        sudoku_board = SudokuGenerator(self.width, removed_cells)
+        sudoku_board.fill_values()
+
+        #create a copy of the complete board
+        self.complete_sudoku_board = [
+            [" " for row in range(9)]
+            for col in range(9)
+        ]
+        for row in range(9):
+            for col in range(9):
+                self.complete_sudoku_board[row][col] = sudoku_board.get_board()[row][col]
+         #finish setting up the sudoko board
+        self.sudoku_board = sudoku_board
         self.sudoku_board.remove_cells()
         board = self.sudoku_board.get_board()
 
-
+        #save the board as cells
         for row in range(self.width):
             for col in range(self.width):
                 if board[row][col] != 0:

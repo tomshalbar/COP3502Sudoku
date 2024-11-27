@@ -81,8 +81,10 @@ def game_over(screen):
 
     return restart_rect
 
-def game_in_progress_screen(screen):
-    pass
+def game_in_progress_screen(screen, mistakes):
+    mistakes_surf = pygame.font.Font(None, 30).render(f"Mistakes: {str(mistakes)}", 0, (0,0,0))
+    mistakes_rect = mistakes_surf.get_rect(center=(SQUARE_SIZE * 2, HEIGHT + SQUARE_SIZE // 2))
+    screen.blit(mistakes_surf, mistakes_rect)
 
 def game_won(screen):
     welcome_picture = pygame.image.load(WELCOME_BG_IMAGE).convert()
@@ -115,6 +117,7 @@ def main():
     mode = MODE_START
     run = True
     square_col, square_row = 0, 0
+    mistakes = 0
 
     while run:
         if mode == MODE_START:
@@ -139,7 +142,7 @@ def main():
 
         if mode == MODE_PROGRESS:
             game_board.draw()
-
+            game_in_progress_screen(screen, mistakes)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
@@ -180,8 +183,15 @@ def main():
                     if event.key == pygame.K_BACKSPACE and not game_board.cells[square_row][square_col].pre_filled:
                         game_board.cells[square_row][square_col].sketched_value = 0
                         game_board.cells[square_row][square_col].value = 0
-                    if event.key == pygame.K_RETURN and not game_board.cells[square_row][square_col].pre_filled:
+                    if event.key == pygame.K_RETURN and not game_board.cells[square_row][square_col].pre_filled and game_board.cells[square_row][square_col].sketched_value != 0:
                         game_board.cells[square_row][square_col].value = game_board.cells[square_row][square_col].sketched_value
+                        if not (game_board.cells[square_row][square_col].value == game_board.complete_sudoku_board[square_row][square_col]):
+                            game_board.cells[square_row][square_col].correct = False
+                            mistakes += 1
+                        else:
+                            game_board.cells[square_row][square_col].correct = True
+
+
 
 
                 if game_board.is_full() and game_board.check_board():
@@ -203,7 +213,7 @@ def main():
             restart = game_over(screen)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    run = Falseeasy, medium, hard = start_game_screen(screen)
+                    run = False
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                    if restart.collidepoint(event.pos):
@@ -211,10 +221,6 @@ def main():
                        mode = MODE_START
 
         pygame.display.update()
-
-
-
-
 
 
 if __name__ == '__main__':

@@ -5,7 +5,7 @@ from constants import LINE_COLOR
 
 
 class Cell:
-    def __init__(self, value, row, col, screen, pre_filled=False):
+    def __init__(self, value, row, col, screen, pre_filled=False, correct = True):
         self.value = value
         self.row = row
         self.col = col
@@ -13,6 +13,7 @@ class Cell:
         self.sketched_value = 0
         self.selected = False
         self.pre_filled = pre_filled
+        self.correct = correct
 
     def set_cell_value(self, value):
         """Setter
@@ -44,12 +45,12 @@ class Cell:
         font_size = pygame.font.Font(None, 40)
         sketch_font_size = pygame.font.SysFont(None, 25)
 
-        if self.value != 0 and self.pre_filled:
+        if self.value != 0 and self.correct:
             text = font_size.render(str(self.value), True, (0, 0, 0))
             text_rectangle = text.get_rect(center=(x + constants.SQUARE_SIZE // 2, y + constants.SQUARE_SIZE // 2))
             self.screen.blit(text, text_rectangle)
-        elif self.value != 0 and not self.pre_filled:
-            text = font_size.render(str(self.value), True, (0, 0,150))
+        elif self.value != 0 and not self.pre_filled and not self.correct:
+            text = font_size.render(str(self.value), True, (255, 0, 0))
             text_rectangle = text.get_rect(center=(x + constants.SQUARE_SIZE // 2, y + constants.SQUARE_SIZE // 2))
             self.screen.blit(text, text_rectangle)
         elif self.sketched_value != 0:
