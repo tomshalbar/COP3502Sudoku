@@ -120,22 +120,23 @@ def main():
 
     while run:
         if mode == MODE_START:
+
             easy, medium, hard = start_game_screen(screen)
             # event loop
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if easy.collidepoint(event.pos):
-                    game_board = Board(9, 9, screen, difficulty='easy')
-                    mode = MODE_PROGRESS
-                elif medium.collidepoint(event.pos):
-                    game_board = Board(9, 9, screen, difficulty='medium')
-                    mode = MODE_PROGRESS
-                elif hard.collidepoint(event.pos):
-                    game_board = Board(9, 9, screen, difficulty='hard')
-                    mode = MODE_PROGRESS
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if easy.collidepoint(event.pos):
+                        game_board = Board(9, 9, screen, difficulty='easy')
+                        mode = MODE_PROGRESS
+                    elif medium.collidepoint(event.pos):
+                        game_board = Board(9, 9, screen, difficulty='medium')
+                        mode = MODE_PROGRESS
+                    elif hard.collidepoint(event.pos):
+                        game_board = Board(9, 9, screen, difficulty='hard')
+                        mode = MODE_PROGRESS
 
 
         if mode == MODE_PROGRESS:
@@ -156,6 +157,7 @@ def main():
             if event.type == pygame.KEYUP   :
                 if 48 < event.key < 58:
                     game_board.cells[square_row][square_col].value = event.key - 48
+
         if mode == MODE_WON:
             won = game_won(screen)
             for event in pygame.event.get():
@@ -174,10 +176,12 @@ def main():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                    if restart.collidepoint(event.pos):
                        print("Restart")
+                       mode = MODE_START
+                       continue
 
 
                        #resert_to_orginal not working here
-                       game_board.reset_to_original()
+
 
 
 

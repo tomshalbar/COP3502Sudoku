@@ -28,7 +28,7 @@ class SudokuGenerator:
 
     '''
     def get_board(self) -> list[list]:
-        return self.original_board
+        return self.board
 
 
     '''
