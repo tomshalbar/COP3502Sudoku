@@ -81,7 +81,8 @@ def game_over(screen):
 
     return restart_rect
 
-
+def game_in_progress_screen(screen):
+    pass
 
 def game_won(screen):
     welcome_picture = pygame.image.load(WELCOME_BG_IMAGE).convert()
@@ -90,7 +91,7 @@ def game_won(screen):
 
     pygame.display.flip()
 
-    game_over_surf = game_over_font.render("Game Won! :(", 0, LINE_COLOR)
+    game_over_surf = game_over_font.render("Game Won!", 0, LINE_COLOR)
     game_over_rect = game_over_surf.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 50))
 
     screen.blit(welcome_picture, (0, 0))
@@ -104,8 +105,6 @@ def game_won(screen):
 
     return game_won_rect
 
-def game_in_progress_screen(screen):
-    pass
 
 
 def main():
@@ -113,10 +112,9 @@ def main():
     screen = pygame.display.set_mode((WIDTH, HEIGHT + SQUARE_SIZE))
     pygame.display.set_caption("Sudoku")
     screen.fill(BG_COLOR)
-    mode = MODE_END
+    mode = MODE_START
     run = True
     square_col, square_row = 0, 0
-
 
     while run:
         if mode == MODE_START:
@@ -146,17 +144,51 @@ def main():
                 if event.type == pygame.QUIT:
                     run = False
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                game_board.cells[square_row][square_col].selected = False
-                clicked_x, clicked_y = event.pos
-                if clicked_y < HEIGHT:
-                    square_col, square_row = clicked_x // SQUARE_SIZE, clicked_y // SQUARE_SIZE
-                    if not game_board.cells[square_row][square_col].pre_filled: #Won't let user click pre filled square
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    game_board.cells[square_row][square_col].selected = False
+                    clicked_x, clicked_y = event.pos
+                    if clicked_y < HEIGHT:
+                        square_col, square_row = clicked_x // SQUARE_SIZE, clicked_y // SQUARE_SIZE
                         game_board.cells[square_row][square_col].selected = True
 
-            if event.type == pygame.KEYUP   :
-                if 48 < event.key < 58:
-                    game_board.cells[square_row][square_col].value = event.key - 48
+                if event.type == pygame.KEYUP:
+                    #arrow key movement
+
+                    if event.key == pygame.K_RIGHT and square_col < 8:
+                        game_board.cells[square_row][square_col].selected = False
+                        square_col, square_row = square_col + 1, square_row
+                        game_board.cells[square_row][square_col].selected = True
+
+                    if event.key == pygame.K_LEFT and square_col > 0:
+                        game_board.cells[square_row][square_col].selected = False
+                        square_col, square_row = square_col - 1, square_row
+                        game_board.cells[square_row][square_col].selected = True
+
+                    if event.key == pygame.K_UP and square_row > 0:
+                        game_board.cells[square_row][square_col].selected = False
+                        square_col, square_row = square_col, square_row - 1
+                        game_board.cells[square_row][square_col].selected = True
+
+                    if event.key == pygame.K_DOWN and square_row < 8:
+                        game_board.cells[square_row][square_col].selected = False
+                        square_col, square_row = square_col, square_row + 1
+                        game_board.cells[square_row][square_col].selected = True
+
+                    # check that the input is a num and not a pre-filled square
+                    if 48 < event.key < 58 and not game_board.cells[square_row][square_col].pre_filled:
+                        game_board.cells[square_row][square_col].sketched_value = event.key - 48
+                    if event.key == pygame.K_BACKSPACE and not game_board.cells[square_row][square_col].pre_filled:
+                        game_board.cells[square_row][square_col].sketched_value = 0
+                        game_board.cells[square_row][square_col].value = 0
+                    if event.key == pygame.K_RETURN and not game_board.cells[square_row][square_col].pre_filled:
+                        game_board.cells[square_row][square_col].value = game_board.cells[square_row][square_col].sketched_value
+
+
+                if game_board.is_full() and game_board.check_board():
+                    mode = MODE_WON
+                elif game_board.is_full():
+                    mode = MODE_END
+
 
         if mode == MODE_WON:
             won = game_won(screen)
@@ -177,10 +209,6 @@ def main():
                    if restart.collidepoint(event.pos):
                        print("Restart")
                        mode = MODE_START
-                       continue
-
-
-                       #resert_to_orginal not working here
 
 
 
@@ -189,8 +217,6 @@ def main():
 
 
         pygame.display.update()
-
-        pygame.time.Clock().tick(60)
 
 
 

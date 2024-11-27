@@ -44,7 +44,6 @@ class Board:
         self.sudoku_board.fill_values()
         self.sudoku_board.remove_cells()
         board = self.sudoku_board.get_board()
-        self.sudoku_board.print_board()
 
 
         for row in range(self.width):
@@ -146,14 +145,15 @@ class Board:
         """Resets all cells in the board to their original values
         (0 if cleared, otherwise the corresponding digit)."""
 
-        #loops over all values to reset to original and clear all sketched values
-        curr_board =  self.get_board()
+        board = self.sudoku_board.get_board()
 
-        for row in range(BOARD_ROWS):
-            for col in range(BOARD_COLS):
-                original_val = curr_board[row][col]
-                self.cells[row][col] = self.original_board[row][col]
-                self.cells[row][col].set_sketched_value(0)
+        for row in range(self.width):
+            for col in range(self.width):
+                if board[row][col] != 0:
+                    self.cells[row][col] = Cell(board[row][col], row, col, self.screen, pre_filled=True)
+                else:
+                    self.cells[row][col] = Cell(board[row][col], row, col, self.screen, pre_filled=False)
+
 
 
 
