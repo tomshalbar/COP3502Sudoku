@@ -46,6 +46,7 @@ class Board:
         board = self.sudoku_board.get_board()
         self.sudoku_board.print_board()
 
+
         for row in range(self.width):
             for col in range(self.width):
                 if board[row][col] != 0:
@@ -146,7 +147,7 @@ class Board:
         (0 if cleared, otherwise the corresponding digit)."""
 
         #loops over all values to reset to original and clear all sketched values
-        curr_board = self.get_board()
+        curr_board =  self.sudoku_board.get_board()
 
         for row in range(BOARD_ROWS):
             for col in range(BOARD_COLS):
@@ -216,6 +217,7 @@ class Board:
                     return False
 
         return True
+
 
 
 

@@ -79,6 +79,8 @@ def game_over(screen):
 
     screen.blit(restart_surf, restart_rect)
 
+    return restart_rect
+
 
 
 def game_won(screen):
@@ -111,9 +113,11 @@ def main():
     screen = pygame.display.set_mode((WIDTH, HEIGHT + SQUARE_SIZE))
     pygame.display.set_caption("Sudoku")
     screen.fill(BG_COLOR)
-    mode = MODE_START
+    mode = MODE_END
     run = True
     square_col, square_row = 0, 0
+
+
     while run:
         if mode == MODE_START:
             easy, medium, hard = start_game_screen(screen)
@@ -155,11 +159,23 @@ def main():
         if mode == MODE_WON:
             won = game_won(screen)
             for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                   if easy.collidepoint(event.pos):
+                   if won.collidepoint(event.pos):
                        run = False
 
+        if mode == MODE_END:
+            restart = game_over(screen)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False
 
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                   if restart.collidepoint(event.pos):
+                       print("Restart")
+                       #resert_to_orginal not working here
+                       game_board.reset_to_original()
 
 
 
