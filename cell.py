@@ -1,6 +1,9 @@
 import constants
 import pygame
 
+from constants import LINE_COLOR
+
+
 class Cell:
     def __init__(self, value, row, col, screen, pre_filled=False):
         self.value = value
@@ -34,8 +37,8 @@ class Cell:
             # sets to red
             color = constants.RED
         else:
-            # sets to black
-            color = (0, 0, 0)
+            # sets to blue
+            color = (128, 128, 128)
 
         pygame.draw.rect(self.screen, color, (x, y, constants.SQUARE_SIZE, constants.SQUARE_SIZE), 2)
         font_size = pygame.font.Font(None, 40)

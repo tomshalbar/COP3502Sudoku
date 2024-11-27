@@ -59,30 +59,31 @@ class Board:
         """Draws an outline of the Sudoku grid, with bold lines to delineate the 3x3 boxes.
         Draws every cell on this board."""
         self.screen.fill(BG_COLOR)
-        for i in range (1,BOARD_ROWS):
-            pygame.draw.line(
+        for row in range(self.width):
+            for col in range(self.width):
+                self.cells[row][col].draw()
+
+        for i in range (0,10, 3):
+                pygame.draw.line(
                 self.screen,
-                LINE_COLOR,
+                (0,0,0),
                 (0, i*SQUARE_SIZE),
                 (WIDTH, i * SQUARE_SIZE),
-                LINE_WIDTH
+                LINE_WIDTH + 1
             )
 
 
         #draw vertical grids
-        for i in range(1, BOARD_COLS):
+        for i in range(0, 10, 3):
             pygame.draw.line(
                 self.screen,
-                LINE_COLOR,
+                (0,0,0),
                 (i * SQUARE_SIZE, 0),
                 (i * SQUARE_SIZE, HEIGHT),
-                LINE_WIDTH
+                LINE_WIDTH + 1
 
             )
 
-        for row in range(self.width):
-            for col in range(self.width):
-                self.cells[row][col].draw()
 
 
 
