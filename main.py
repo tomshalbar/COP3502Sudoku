@@ -203,18 +203,12 @@ def main():
             restart = game_over(screen)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    run = False
+                    run = Falseeasy, medium, hard = start_game_screen(screen)
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                    if restart.collidepoint(event.pos):
                        print("Restart")
                        mode = MODE_START
-
-
-
-
-
-
 
         pygame.display.update()
 
