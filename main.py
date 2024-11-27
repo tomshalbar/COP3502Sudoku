@@ -174,6 +174,8 @@ def main():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                    if restart.collidepoint(event.pos):
                        print("Restart")
+
+
                        #resert_to_orginal not working here
                        game_board.reset_to_original()
 

@@ -21,13 +21,14 @@ class SudokuGenerator:
         self.removed_cells = removed_cells
         self.board = [["-" for i in range(self.row_length)] for j in range(self.row_length)]
         self.box_length = int(row_length ** .5)
+        self.original_board =  [["-" for i in range(self.row_length)] for j in range(self.row_length)]
 
     '''
 	Returns a 2D python list of numbers which represents the board
 
     '''
     def get_board(self) -> list[list]:
-        return self.board
+        return self.original_board
 
 
     '''

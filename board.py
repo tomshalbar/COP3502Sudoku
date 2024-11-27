@@ -147,12 +147,12 @@ class Board:
         (0 if cleared, otherwise the corresponding digit)."""
 
         #loops over all values to reset to original and clear all sketched values
-        curr_board =  self.sudoku_board.get_board()
+        curr_board =  self.get_board()
 
         for row in range(BOARD_ROWS):
             for col in range(BOARD_COLS):
                 original_val = curr_board[row][col]
-                self.cells[row][col].set_cell_value(original_val)
+                self.cells[row][col] = self.original_board[row][col]
                 self.cells[row][col].set_sketched_value(0)
 
 
