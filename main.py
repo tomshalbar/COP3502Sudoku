@@ -24,14 +24,11 @@ def create_welcome_buttons(text, width):
 
 
 def start_game_screen(screen):
+    screen.fill(BG_COLOR)
     welcome_picture = pygame.image.load(WELCOME_BG_IMAGE).convert()
-    welcome_picture = pygame.transform.scale(welcome_picture, (WIDTH, HEIGHT))
+    welcome_picture = pygame.transform.scale(welcome_picture, (WIDTH,  HEIGHT + SQUARE_SIZE))
     welcome_font = pygame.font.Font(None, WELCOME_FONT)
     select_mode_font = pygame.font.Font(None, MODE_FONT)
-
-    pygame.display.flip()
-
-
 
     welcome_surf = welcome_font.render("Welcome to Sudoku", 0, LINE_COLOR)
     welcome_rect = welcome_surf.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 50))
@@ -50,6 +47,8 @@ def start_game_screen(screen):
     screen.blit(easy_surf, easy_rect)
     screen.blit(medium_surf, medium_rect)
     screen.blit(hard_surf, hard_rect)
+
+
 
     return easy_rect, medium_rect, hard_rect
 
@@ -82,9 +81,32 @@ def game_over(screen):
     return restart_rect
 
 def game_in_progress_screen(screen, mistakes):
-    mistakes_surf = pygame.font.Font(None, 30).render(f"Mistakes: {str(mistakes)}/5", 0, (0,0,0))
+
+
+    mistakes_surf = pygame.font.Font(None, 30).render(f"Mistakes: {str(mistakes)}", 0, (0,0,0))
     mistakes_rect = mistakes_surf.get_rect(center=(SQUARE_SIZE * 2, HEIGHT + SQUARE_SIZE // 2))
     screen.blit(mistakes_surf, mistakes_rect)
+
+    restart_surf = pygame.font.Font(None, 30).render(f"Restart", 0, (0, 0, 0))
+    restart_rect = restart_surf.get_rect(center=(SQUARE_SIZE*4.5, HEIGHT + SQUARE_SIZE // 2))
+    screen.fill(BUTTON_FILL_COLOR, restart_rect, special_flags=0)
+    screen.blit(restart_surf, restart_rect)
+
+    exit_surf = pygame.font.Font(None, 30).render(f"exit", 0, (0, 0, 0))
+    exit_rect = exit_surf.get_rect(center=(SQUARE_SIZE * 8, HEIGHT + SQUARE_SIZE // 2))
+    screen.fill(BUTTON_FILL_COLOR, exit_rect, special_flags=0)
+    screen.blit(exit_surf, exit_rect)
+
+
+    reset_surf = pygame.font.Font(None, 30).render(f"Reset", 0, (0, 0, 0))
+    reset_rect = reset_surf.get_rect(center=(SQUARE_SIZE * 6.5, HEIGHT + SQUARE_SIZE // 2))
+    screen.fill(BUTTON_FILL_COLOR, reset_rect, special_flags=0)
+    screen.blit(reset_surf, reset_rect)
+
+
+    return exit_rect, restart_rect, reset_rect
+
+
 
 def game_won(screen):
     welcome_picture = pygame.image.load(WELCOME_BG_IMAGE).convert()
@@ -99,13 +121,13 @@ def game_won(screen):
     screen.blit(welcome_picture, (0, 0))
     screen.blit(game_over_surf, game_over_rect)
 
-    game_won_surf, game_won_rect = create_welcome_buttons("Exit", WIDTH // 1.5 - 50)
+    exit_surf, exit_rect = create_welcome_buttons("Exit", WIDTH // 1.5 - 50)
 
-    screen.fill(BUTTON_FILL_COLOR, game_won_rect, special_flags=0)
+    screen.fill(BUTTON_FILL_COLOR, exit_rect, special_flags=0)
 
-    screen.blit(game_won_surf, game_won_rect)
+    screen.blit(exit_surf, exit_rect)
 
-    return game_won_rect
+    return exit_rect
 
 
 
@@ -113,7 +135,6 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT + SQUARE_SIZE))
     pygame.display.set_caption("Sudoku")
-    screen.fill(BG_COLOR)
     mode = MODE_START
     run = True
     square_col, square_row = 0, 0
@@ -142,12 +163,23 @@ def main():
 
         if mode == MODE_PROGRESS:
             game_board.draw()
+            exit_game, restart_game, reset_game = game_in_progress_screen(screen, mistakes)
             game_in_progress_screen(screen, mistakes)
+            
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    if exit_game.collidepoint(event.pos):
+                        run = False
+
+                    if restart_game.collidepoint(event.pos):
+                        mode = MODE_START
+
+                    if reset_game.collidepoint(event.pos):
+                        game_board.reset_to_original()
+
                     game_board.cells[square_row][square_col].selected = False
                     clicked_x, clicked_y = event.pos
                     if clicked_y < HEIGHT:
@@ -188,11 +220,6 @@ def main():
                         if not (game_board.cells[square_row][square_col].value == game_board.complete_sudoku_board[square_row][square_col]):
                             game_board.cells[square_row][square_col].correct = False
                             mistakes += 1
-                            if mistakes >= 5:
-                                game_board.draw()
-                                game_in_progress_screen(screen, mistakes)
-                                mode = MODE_END
-
                         else:
                             game_board.cells[square_row][square_col].correct = True
 
@@ -206,12 +233,12 @@ def main():
 
 
         if mode == MODE_WON:
-            won = game_won(screen)
+            exit = game_won(screen)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                   if won.collidepoint(event.pos):
+                   if exit.collidepoint(event.pos):
                        run = False
 
         if mode == MODE_END:
@@ -222,10 +249,11 @@ def main():
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                    if restart.collidepoint(event.pos):
-                       print("Restart")
                        mode = MODE_START
 
         pygame.display.update()
+        # pygame.time.Clock().tick(60)
+
 
 
 if __name__ == '__main__':
