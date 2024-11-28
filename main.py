@@ -82,7 +82,7 @@ def game_over(screen):
     return restart_rect
 
 def game_in_progress_screen(screen, mistakes):
-    mistakes_surf = pygame.font.Font(None, 30).render(f"Mistakes: {str(mistakes)}", 0, (0,0,0))
+    mistakes_surf = pygame.font.Font(None, 30).render(f"Mistakes: {str(mistakes)}/5", 0, (0,0,0))
     mistakes_rect = mistakes_surf.get_rect(center=(SQUARE_SIZE * 2, HEIGHT + SQUARE_SIZE // 2))
     screen.blit(mistakes_surf, mistakes_rect)
 
@@ -188,6 +188,11 @@ def main():
                         if not (game_board.cells[square_row][square_col].value == game_board.complete_sudoku_board[square_row][square_col]):
                             game_board.cells[square_row][square_col].correct = False
                             mistakes += 1
+                            if mistakes >= 5:
+                                game_board.draw()
+                                game_in_progress_screen(screen, mistakes)
+                                mode = MODE_END
+
                         else:
                             game_board.cells[square_row][square_col].correct = True
 
