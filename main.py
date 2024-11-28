@@ -175,9 +175,11 @@ def main():
                         run = False
 
                     if restart_game.collidepoint(event.pos):
+                        mistakes = 0
                         mode = MODE_START
 
                     if reset_game.collidepoint(event.pos):
+                        mistakes = 0
                         game_board.reset_to_original()
 
                     game_board.cells[square_row][square_col].selected = False
