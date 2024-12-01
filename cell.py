@@ -35,10 +35,8 @@ class Cell:
         y = self.row * constants.SQUARE_SIZE
 
         if self.selected:
-            # sets to red
             color = constants.RED
         else:
-            # sets to blue
             color = (128, 128, 128)
 
         pygame.draw.rect(self.screen, color, (x, y, constants.SQUARE_SIZE, constants.SQUARE_SIZE), 2)

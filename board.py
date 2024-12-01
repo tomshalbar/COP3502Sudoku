@@ -84,7 +84,6 @@ class Board:
             )
 
 
-        #draw vertical grids
         for i in range(0, 10, 3):
             pygame.draw.line(
                 self.screen,
@@ -102,7 +101,6 @@ class Board:
     def select(self, row, col):
         """Marks the cell at (row, col) in the board as the current selected cell.
         Once a cell has been selected, the user can edit its value or sketched value."""
-        # selects a new cell and deselects old cell
         if self.selected_cell:
             self.selected_cell.selected = False
 
@@ -113,7 +111,6 @@ class Board:
         """If a tuple of (x,y) coordinates is within the displayed board,
         this function returns a tuple of the (row, col) of the cell which was clicked.
         Otherwise, this function returns None."""
-        # re-maps the raw coordinates to the grid created if raw coordinates are in the board
         if 0 <= x_cord < HEIGHT and 0 <= y_cord < WIDTH:
             row = x_cord // SQUARE_SIZE
             col = y_cord // SQUARE_SIZE
@@ -126,7 +123,6 @@ class Board:
         Note that the user can only remove the cell values and
         sketched values that are filled by themselves."""
 
-        #clears only user-inputted values for the cell selected
         if self.selected_cell:
             self.selected_cell.set_sketched_value(0)
 
@@ -145,8 +141,6 @@ class Board:
     def place_number(self, value):
         """Sets the value of the current selected cell equal to the user entered value.
         Called when the user presses the Enter key."""
-
-        #sets new cell value and removes the sketched value
         if self.selected_cell:
             if self.selected_cell.value == 0:
                 self.selected_cell.set_cell_value(value)
@@ -171,7 +165,6 @@ class Board:
 
     def is_full(self):
         """Returns a Boolean value indicating whether the board is full or not."""
-        # checks to see if every square is empty and returns result
         for row in range(BOARD_ROWS):
             for col in range(BOARD_COLS):
                 if self.cells[row][col].value == 0:
@@ -180,10 +173,8 @@ class Board:
 
     def update_board(self):
         """Updates the underlying 2D board with the values in all cells."""
-        # creates a new 2D board that is empty
         new_board = [[0 for x in range(BOARD_ROWS)] for x in range(BOARD_COLS)]
 
-        # fills in the values for the new board created earlier
         for row in range(BOARD_ROWS):
             for col in range(BOARD_COLS):
                 new_board[row][col] = self.cells[row][col].value
@@ -193,7 +184,6 @@ class Board:
     def find_empty(self):
         """Finds an empty cell and returns its row and col as a tuple (x,y)."""
 
-        #loops through all values and checks for empty cells.
         for row in range(BOARD_ROWS):
             for col in range(BOARD_COLS):
                 if self.cells[row][col].value == 0:
@@ -203,22 +193,17 @@ class Board:
     def check_board(self):
         """Check whether the Sudoku board is solved correctly."""
 
-        # for row and col checkers the function creates a list and checks for duplicates or empty squares in the list
 
-        # rows
         for row in range(BOARD_ROWS):
             row_val = [self.cells[row][col].value for col in range(BOARD_COLS)]
             if len(row_val) != len(set(row_val)) or 0 in row_val:
                 return False
 
-        # cols
         for col in range(BOARD_COLS):
             col_val = [self.cells[row][col].value for row in range(BOARD_ROWS)]
             if len(col_val) != len(set(col_val)) or 0 in col_val:
                 return False
 
-        # 3x3
-        # seperates the board in to 3x3 grids and checks for duplicates and empty spaces
         for rbox in range(0, BOARD_ROWS, 3):
             for cbox in range(0, BOARD_COLS, 3):
                 box_values = []
