@@ -56,12 +56,12 @@ def start_game_screen(screen):
 
 
 def game_over(screen):
+    screen.fill(BG_COLOR)
     welcome_picture = pygame.image.load(WELCOME_BG_IMAGE).convert()
-    welcome_picture = pygame.transform.scale(welcome_picture, (WIDTH, HEIGHT))
+    welcome_picture = pygame.transform.scale(welcome_picture, (WIDTH,  HEIGHT + SQUARE_SIZE))
     game_over_font = pygame.font.Font(None, GAME_OVER_FONT)
 
 
-    pygame.display.flip()
 
     game_over_surf = game_over_font.render("Game Over :(", 0, LINE_COLOR)
     game_over_rect = game_over_surf.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 50))
@@ -109,11 +109,12 @@ def game_in_progress_screen(screen, mistakes):
 
 
 def game_won(screen):
+    screen.fill(BG_COLOR)
     welcome_picture = pygame.image.load(WELCOME_BG_IMAGE).convert()
-    welcome_picture = pygame.transform.scale(welcome_picture, (WIDTH, HEIGHT))
+    welcome_picture = pygame.transform.scale(welcome_picture, (WIDTH,  HEIGHT + SQUARE_SIZE))
     game_over_font = pygame.font.Font(None, GAME_OVER_FONT)
 
-    pygame.display.flip()
+
 
     game_over_surf = game_over_font.render("Game Won!", 0, LINE_COLOR)
     game_over_rect = game_over_surf.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 50))
