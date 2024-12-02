@@ -2,6 +2,7 @@
 
 
 link to final video: https://youtu.be/9QmFzrkgufY 
+link to final report: https://docs.google.com/document/d/1TDLnOxOPt36CCJ-Y5vrLvy6_NeN0OkoqHRW45Mu6nI8/edit?usp=sharing
 
 
 ## Fork Repository Instructions
