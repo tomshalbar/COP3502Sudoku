@@ -1,8 +1,7 @@
 # Sudoku-Project
 
 
-link to final video: https://youtu.be/J06XK4zZnS4 
-
+link to final video: https://youtu.be/9QmFzrkgufY 
 
 
 ## Fork Repository Instructions
