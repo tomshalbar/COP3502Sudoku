@@ -82,7 +82,7 @@ def game_over(screen):
 
 def game_in_progress_screen(screen, mistakes):
 
-
+    x = 1
     mistakes_surf = pygame.font.Font(None, 30).render(f"Mistakes: {str(mistakes)}/5", 0, (0,0,0))
     mistakes_rect = mistakes_surf.get_rect(center=(SQUARE_SIZE * 2, HEIGHT + SQUARE_SIZE // 2))
     screen.blit(mistakes_surf, mistakes_rect)
@@ -215,9 +215,9 @@ def main():
                     # check that the input is a num and not a pre-filled square
                     if 48 < event.key < 58 and not game_board.cells[square_row][square_col].pre_filled:
                         game_board.cells[square_row][square_col].sketched_value = event.key - 48
-                    if event.key == pygame.K_BACKSPACE and not game_board.cells[square_row][square_col].pre_filled:
-                        game_board.cells[square_row][square_col].sketched_value = 0
-                        game_board.cells[square_row][square_col].value = 0
+                        if event.key == pygame.K_BACKSPACE and not game_board.cells[square_row][square_col].pre_filled:
+                            game_board.cells[square_row][square_col].sketched_value = 0
+                            game_board.cells[square_row][square_col].value = 0
                     if event.key == pygame.K_RETURN and not game_board.cells[square_row][square_col].pre_filled and game_board.cells[square_row][square_col].sketched_value != 0:
                         game_board.cells[square_row][square_col].value = game_board.cells[square_row][square_col].sketched_value
                         if not (game_board.cells[square_row][square_col].value == game_board.complete_sudoku_board[square_row][square_col]):
@@ -242,6 +242,7 @@ def main():
 
 
         if mode == MODE_WON:
+
             exit = game_won(screen)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
