@@ -82,7 +82,6 @@ def game_over(screen):
 
 def game_in_progress_screen(screen, mistakes):
 
-    x = 1
     mistakes_surf = pygame.font.Font(None, 30).render(f"Mistakes: {str(mistakes)}/5", 0, (0,0,0))
     mistakes_rect = mistakes_surf.get_rect(center=(SQUARE_SIZE * 2, HEIGHT + SQUARE_SIZE // 2))
     screen.blit(mistakes_surf, mistakes_rect)
