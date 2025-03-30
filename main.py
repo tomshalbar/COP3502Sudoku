@@ -215,9 +215,9 @@ def main():
                     # check that the input is a num and not a pre-filled square
                     if 48 < event.key < 58 and not game_board.cells[square_row][square_col].pre_filled:
                         game_board.cells[square_row][square_col].sketched_value = event.key - 48
-                        if event.key == pygame.K_BACKSPACE and not game_board.cells[square_row][square_col].pre_filled:
-                            game_board.cells[square_row][square_col].sketched_value = 0
-                            game_board.cells[square_row][square_col].value = 0
+                    if event.key == pygame.K_BACKSPACE and not game_board.cells[square_row][square_col].pre_filled:
+                        game_board.cells[square_row][square_col].sketched_value = 0
+                        game_board.cells[square_row][square_col].value = 0
                     if event.key == pygame.K_RETURN and not game_board.cells[square_row][square_col].pre_filled and game_board.cells[square_row][square_col].sketched_value != 0:
                         game_board.cells[square_row][square_col].value = game_board.cells[square_row][square_col].sketched_value
                         if not (game_board.cells[square_row][square_col].value == game_board.complete_sudoku_board[square_row][square_col]):

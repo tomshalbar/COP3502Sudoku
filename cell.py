@@ -56,3 +56,8 @@ class Cell:
             text_rectangle = text.get_rect(center=(x + constants.SQUARE_SIZE // 4, y + constants.SQUARE_SIZE // 4))
             self.screen.blit(text, text_rectangle)
 
+    def highlightCells(self, selectedValue):
+        x = self.col * constants.SQUARE_SIZE
+        y = self.row * constants.SQUARE_SIZE
+        if self.value == selectedValue:
+            pygame.draw.rect(self.screen, (150,50,0), (x, y, constants.SQUARE_SIZE, constants.SQUARE_SIZE), 2)
